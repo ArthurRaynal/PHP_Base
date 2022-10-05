@@ -1,14 +1,123 @@
+<?php
+$title = "Contact";
+$firstname = $_POST["FirstName"];
+$lastname = $_POST["LastName"];
+$email = $_POST["Email"];
+$raison = $_POST["raison"];
+$civilite = $_POST["civilite"];
+$message = $_POST["message"];
+$empty_error = "Veuillez remplir ce champ.";
+$email_error = "Veuillez renseigner une addresse email valide.";
+$message_error = "Veuillez rentrer au moins 5 caracteres";
+$methode = $_SERVER["REQUEST_METHOD"];
+$email_valid_pattern = "^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$^";
+$contact_file = 'form.txt';
+$contact_infos = "firstname : $firstname\nlastname : $lastname\nemail : $email\nmessage : $message\n ------------------------------------\n";
+$user_infos_array = array(
+    'firstname' => $firstname,
+    'lastname' => $lastname,
+    'email' => $email,
+    'raison' => $raison,
+    'civilite' => $civilite,
+    'message' => $message
+    );
+$_SESSION['user_data'] = $user_infos_array;
+
+require 'header.php';
+
+?>
+
 <!-- Contact Section -->
 <div class="w3-container w3-padding-64" id="contact">
+
+    <?php if($_SERVER["REQUEST_METHOD"] == "POST" && (!empty($lastname) && !empty($email) && !empty($firstname) && !empty($message) && !empty($civilite))){
+        echo "<h2>Votre formulaire à bien été envoyer !</h2>";
+        file_put_contents($contact_file,$contact_infos, FILE_APPEND);
+        unset($_SESSION['user_data']);
+    }
+    ?>
+
     <h1>Contact</h1><br>
-    <p>We offer full-service catering for any event, large or small. We understand your needs and we will cater the food to satisfy the biggerst criteria of them all, both look and taste. Do not hesitate to contact us.</p>
-    <p class="w3-text-blue-grey w3-large"><b>Catering Service, 42nd Living St, 43043 New York, NY</b></p>
-    <p>You can also contact us by phone 00553123-2323 or email catering@catering.com, or you can send us a message here:</p>
-    <form action="/action_page.php" target="_blank">
-        <p><input class="w3-input w3-padding-16" type="text" placeholder="Name" required name="Name"></p>
-        <p><input class="w3-input w3-padding-16" type="number" placeholder="How many people" required name="People"></p>
-        <p><input class="w3-input w3-padding-16" type="datetime-local" placeholder="Date and time" required name="date" value="2020-11-16T20:00"></p>
-        <p><input class="w3-input w3-padding-16" type="text" placeholder="Message \ Special requirements" required name="Message"></p>
-        <p><button class="w3-button w3-light-grey w3-section" type="submit">SEND MESSAGE</button></p>
+    <form method="post" action="?page=contact">
+        <p><input class="w3-input w3-padding-16" type="text" placeholder="FirstName"  name="FirstName" value="<?= $_SESSION['user_data']['firstname'] ?>">
+        <p style="color: orangered">
+            <?php
+            if ($methode == "POST" && empty($firstname)) {
+                echo $empty_error;
+            }
+            ?>
+        </p>
+        </p>
+
+        <p><input class="w3-input w3-padding-16" type="text" placeholder="LastName"  name="LastName" value="<?= $_SESSION['user_data']['lastname'] ?>">
+        <p style="color: orangered">
+            <?php
+            if ($methode == "POST" && empty($lastname)) {
+                    echo $empty_error;
+            }
+            ?>
+        </p>
+        </p>
+
+        <label for="civilité">Quelle est votre civilité:</label>
+            <select name="civilite">
+                <option value="" disabled selected></option>
+                <option  value="femme">Femme</option>
+                <option value="homme">Homme</option>
+            </select>
+        <p style="color: orangered">
+            <?php
+            if ($methode == "POST" && empty($civilite)) {
+                echo $empty_error;
+            }
+            ?></p>
+
+
+        <p><input class="w3-input w3-padding-16" type="text" placeholder="Email"  name="Email"></p>
+        <p style="color: orangered">
+            <?php
+            if ($methode == "POST") {
+                if (empty($email)){
+                    echo $empty_error;
+                } elseif (!preg_match($email_valid_pattern,$email)){
+                    echo $email_error;
+                }
+
+            }
+            ?></p><br>
+
+
+        <p> Raison :</p>
+        <input type="radio" id="raison1" name="raison" value="raison1">
+        <label for="raison1">Raison 1</label><br>
+        <input type="radio" id="raison2" name="raison" value="raison2">
+        <label for="raison1">Raison 2</label><br>
+        <input type="radio" id="raison3" name="raison" value="raison3">
+        <label for="raison1">Raison 3</label>
+        <p style="color: orangered">
+            <?php
+            if ($methode == "POST" && empty($raison)) {
+                echo $empty_error;
+            }
+            ?></p>
+        <br>
+        <p>Message :</p>
+        <textarea name="message" ><?= $_SESSION['user_data']['message'] ?></textarea>
+        <p style="color: orangered">
+            <?php
+            if ($methode == "POST" && (strlen($message) < 5)) {
+                echo $message_error;
+            }
+            ?></p>
+
+        <br>
+
+        <input type="file" name="file"><br>
+
+
+        <p><button name="submit" class="w3-button w3-light-grey w3-section" type="submit">SEND</button></p>
     </form>
 </div>
+
+<?= require 'footer.php'; ?>
+

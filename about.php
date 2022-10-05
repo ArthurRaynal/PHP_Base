@@ -1,3 +1,7 @@
+<?=
+$title = "About";
+require 'header.php'; ?>
+
 <!-- About Section -->
 <div class="w3-row w3-padding-64" id="about">
     <div class="w3-col m6 w3-padding-large w3-hide-small">
@@ -11,3 +15,5 @@
         <p class="w3-large w3-text-grey w3-hide-medium">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod temporincididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
     </div>
 </div>
+
+<?= require 'footer.php'; ?>

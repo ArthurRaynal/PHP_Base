@@ -1,4 +1,6 @@
-
+<?=
+$title = "Menu";
+require 'header.php'; ?>
 <!-- Menu Section -->
 <div class="w3-row w3-padding-64" id="menu">
     <div class="w3-col l6 w3-padding-large">
@@ -23,3 +25,4 @@
         <img src="/img/img3.jpg" class="w3-round w3-image w3-opacity-min" alt="Menu" style="width:100%">
     </div>
 </div>
+<?= require 'footer.php'; ?>
